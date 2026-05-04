@@ -1,81 +1,58 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Square | QR Maker</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        body { font-family: 'Apple SD Gothic Neo', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px 20px; background-color: #fff; color: #333; margin: 0; }
-        h1 { font-weight: 700; letter-spacing: -1px; margin-bottom: 10px; }
-        p { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
-        
-        .input-group { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
-        input, select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
-        
-        .btn-black { background: #000; color: #fff; padding: 15px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.2s; margin-top: 10px; }
-        .btn-black:hover { opacity: 0.8; }
+function generateQR() {
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const snsType = document.getElementById('sns-type').value;
+    const snsId = document.getElementById('sns-id').value.trim();
+    const qrcodeContainer = document.getElementById('qrcode');
 
-        /* 결과 및 인쇄 영역 */
-        #result-area { display: none; margin-top: 40px; text-align: center; }
-        #print-card { 
-            width: 320px; padding: 25px; border: 1px solid #000; border-radius: 15px; 
-            background: #fff; margin: 0 auto; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    if (!name) {
+        alert("Please enter your name.");
+        return;
+    }
+
+    // 1. 이메일 형식 검증 (선택 입력이지만 입력 시 체크)
+    if (email !== "") {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
         }
-        .card-header { font-size: 12px; font-weight: 800; border-bottom: 1.5px solid #000; padding-bottom: 8px; margin-bottom: 20px; letter-spacing: 1px; }
-        .card-body { display: flex; gap: 20px; align-items: center; }
-        .card-info { font-size: 13px; line-height: 1.6; }
-        .info-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
-        .card-footer { font-size: 9px; color: #999; margin-top: 20px; text-align: center; letter-spacing: 0.5px; }
+    }
 
-        .action-btns { display: flex; gap: 10px; justify-content: center; margin-top: 25px; }
-        .sub-btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; border: 1px solid #000; background: #fff; font-weight: 500; }
+    // 2. QR 코드 생성
+    qrcodeContainer.innerHTML = "";
+    const baseUrl = window.location.origin + window.location.pathname.replace('index.html', '') + "view.html";
+    const params = new URLSearchParams({ n: name, p: phone, e: email, s: snsType, i: snsId });
+    
+    new QRCode(qrcodeContainer, {
+        text: `${baseUrl}?${params.toString()}`,
+        width: 85,
+        height: 85,
+        colorDark : "#000000",
+        colorLight : "#ffffff"
+    });
 
-        /* 인쇄 전용 스타일 */
-        @media print {
-            body * { visibility: hidden; }
-            #print-card, #print-card * { visibility: visible; }
-            #print-card { position: absolute; left: 50%; top: 20%; transform: translateX(-50%); border: 1px solid #000 !important; box-shadow: none; }
+    // 3. 카드 서식에 텍스트 채우기
+    document.getElementById('p-name').innerText = name;
+    document.getElementById('p-phone').innerText = phone;
+    document.getElementById('p-email').innerText = email;
+    document.getElementById('p-sns-type').innerText = snsType;
+    document.getElementById('p-sns-id').innerText = snsId;
+
+    // 4. 결과창 표시
+    document.getElementById('result-area').style.display = "block";
+
+    // 5. QR 다운로드 기능 연결
+    setTimeout(() => {
+        const img = qrcodeContainer.querySelector('img');
+        if (img) {
+            document.getElementById('download-btn').onclick = function() {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = `MinimalSquare_QR_${name}.png`;
+                link.click();
+            };
         }
-    </style>
-</head>
-<body>
-    <h1>MINIMAL SQUARE</h1>
-    <p>분실 방지를 위한 세이프티 QR 카드를 만드세요.</p>
-
-    <div class="input-group">
-        <input type="text" id="name" placeholder="Owner Name (Required)">
-        <select id="sns-type">
-            <option value="">SNS Type (Optional)</option>
-            <option value="Instagram">Instagram</option>
-            <option value="KakaoTalk">KakaoTalk</option>
-            <option value="Line">Line</option>
-        </select>
-        <input type="text" id="sns-id" placeholder="SNS ID">
-        <input type="email" id="email" placeholder="Email Address">
-        <input type="tel" id="phone" placeholder="Phone Number">
-        <button class="btn-black" onclick="generateQR()">Generate QR Card</button>
-    </div>
-
-    <div id="result-area">
-        <div id="print-card">
-            <div class="card-header">SAFETY CONTACT CARD</div>
-            <div class="card-body">
-                <div id="qrcode"></div>
-                <div class="card-info">
-                    <div id="p-name" class="info-name"></div>
-                    <div id="p-phone"></div>
-                    <div id="p-sns" style="color: #666;"></div>
-                    <div id="p-email" style="font-size: 11px; color: #888;"></div>
-                </div>
-            </div>
-            <div class="card-footer">Scan this QR to contact the owner.<br>© Minimal Square. All rights reserved.</div>
-        </div>
-
-        <div class="action-btns">
-            <button class="sub-btn" onclick="window.print()">카드 인쇄하기 (Print)</button>
-            <button id="download-btn" class="sub-btn">QR이미지 저장 (Save QR)</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    }, 500);
+}
