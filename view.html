@@ -10,10 +10,10 @@
         .quote { font-style: italic; font-size: 1.2rem; margin-bottom: 25px; color: #111; }
         .message { font-size: 0.95rem; color: #666; margin-bottom: 30px; line-height: 1.6; word-break: keep-all; }
         
-        /* 개별 정보 상자 스타일 */
-        .info-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 12px; text-align: left; display: none; } /* 기본은 숨김 */
+        /* 정보 상자 스타일: 초기 상태는 숨김(display: none) */
+        .info-box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 12px; text-align: left; display: none; }
         .label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; margin-bottom: 3px; font-weight: 600; }
-        .value { font-size: 1.05rem; font-weight: 500; color: #000; }
+        .value { font-size: 1.05rem; font-weight: 500; color: #000; word-break: break-all; }
 
         .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
         .btn { padding: 15px; border-radius: 50px; font-weight: 500; text-decoration: none; text-align: center; transition: 0.2s; }
@@ -26,18 +26,39 @@
         <div class="quote">"May your kindness return to you."</div>
         <div class="message">이 물건을 발견해주셔서 감사합니다.<br>Thank you for finding this item.</div>
         
-        <!-- 각 필드별 전용 박스 -->
-        <div id="box-name" class="info-box"><div class="label">Name</div><div id="v-name" class="value"></div></div>
-        <div id="box-sns" class="info-box"><div class="label">SNS / Messenger</div><div id="v-sns" class="value"></div></div>
-        <div id="box-id" class="info-box"><div class="label">SNS ID</div><div id="v-id" class="value"></div></div>
-        <div id="box-email" class="info-box"><div class="label">Email</div><div id="v-email" class="value"></div></div>
-        <div id="box-phone" class="info-box"><div class="label">Phone</div><div id="v-phone" class="value"></div></div>
+        <!-- 각 데이터가 들어갈 전용 박스들입니다 -->
+        <div id="box-name" class="info-box">
+            <div class="label">Owner Name</div>
+            <div id="v-name" class="value"></div>
+        </div>
+
+        <div id="box-sns" class="info-box">
+            <div class="label">SNS or Messenger</div>
+            <div id="v-sns" class="value"></div>
+        </div>
+
+        <div id="box-id" class="info-box">
+            <div class="label">SNS ID</div>
+            <div id="v-id" class="value"></div>
+        </div>
+
+        <div id="box-email" class="info-box">
+            <div class="label">Email Address</div>
+            <div id="v-email" class="value"></div>
+        </div>
+
+        <div id="box-phone" class="info-box">
+            <div class="label">Phone Number</div>
+            <div id="v-phone" class="value"></div>
+        </div>
 
         <div class="btn-group">
             <a id="call-link" href="#" class="btn btn-black">Call Owner</a>
             <a id="mail-link" href="#" class="btn btn-white">Send Email</a>
         </div>
     </div>
+
+    <!-- 로직을 담당하는 view.js 파일을 연결합니다 -->
     <script src="view.js"></script>
 </body>
 </html>
