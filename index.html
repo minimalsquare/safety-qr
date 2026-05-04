@@ -25,16 +25,16 @@
         .card-inner { padding: 0 0.5cm; }
         .card-title { margin: 0 0 15px 0; font-size: 17px; font-weight: bold; }
         
+        /* 정민님 요청: 콜론과 밑줄을 모두 라벨 바로 뒤로 밀착 */
         .field-row { display: flex; align-items: flex-end; margin-bottom: 8px; font-size: 11px; font-weight: bold; height: 16px; }
         
-        /* 정민님 요청 반영: 라벨 폭을 고정하지 않고 각자 단어 뒤에 바로 콜론 배치 */
-        /* 대신 밑줄 시작점을 맞추기 위해 전체 행에 일정한 여백 구조 적용 */
-        .label-text { min-width: 135px; display: inline-block; } /* 콜론을 포함한 라벨 전체 폭만 고정 */
+        /* 라벨 텍스트와 콜론이 자기 길이만큼만 공간을 차지하게 함 */
+        .label-text { white-space: nowrap; margin-right: 5px; flex-shrink: 0; } 
 
-        /* 일반 줄: QR 코드 영역 확보 */
+        /* 밑줄: 콜론 바로 뒤에서 시작해서 최대한 늘어남 */
         .line { border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; min-height: 14px; margin-right: 85px; white-space: nowrap; overflow: hidden; }
 
-        /* 마지막 Mail 줄: 카드 끝까지 길게 */
+        /* 마지막 Mail 줄: QR 코드 간섭 없이 끝까지 */
         .line-full { border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; min-height: 14px; margin-right: 0; white-space: nowrap; overflow: hidden; }
 
         #qrcode-wrapper {
@@ -49,7 +49,7 @@
         @media print {
             body * { visibility: hidden; }
             #print-card, #print-card * { visibility: visible; }
-            #print-card { position: absolute; left: 0; top: 0; border: 1px solid #000 !important; }
+            #print-card { position: absolute; left: 0; top: 0; border: 1px solid #000 !important; box-shadow: none; }
             @page { size: 8.5cm 5.4cm; margin: 0; }
         }
     </style>
@@ -70,13 +70,13 @@
             <div class="card-inner">
                 <div class="card-title">Personal Identification</div>
                 
-                <!-- 노란 공백을 없애기 위해 각 텍스트 바로 뒤에 콜론 배치 -->
+                <!-- 모든 항목 옆에 콜론과 밑줄이 즉시 붙도록 수정 -->
                 <div class="field-row"><span class="label-text">Name :</span><span id="p-name" class="line"></span></div>
                 <div class="field-row"><span class="label-text">Phone :</span><span id="p-phone" class="line"></span></div>
                 <div class="field-row"><span class="label-text">SNS / Messenger :</span><span id="p-sns-type" class="line"></span></div>
                 <div class="field-row"><span class="label-text">SNS / Messenger ID :</span><span id="p-sns-id" class="line"></span></div>
                 
-                <!-- Mail 줄은 길게 -->
+                <!-- Mail 줄은 길게 끝까지 확보 -->
                 <div class="field-row" style="margin-top:10px;"><span class="label-text">Mail :</span><span id="p-email" class="line-full"></span></div>
             </div>
             
