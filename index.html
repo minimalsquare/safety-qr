@@ -21,19 +21,19 @@
             position: relative; overflow: hidden; text-align: left;
         }
         .card-inner { padding: 0 0.5cm; }
-        .card-title { margin: 0 0 10px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
+        .card-title { margin: 0 0 8px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
         
-        /* 행의 높이를 고정하여 데이터 유무와 상관없이 간격 유지 */
-        .field-row { display: flex; align-items: flex-start; margin-bottom: 3px; font-size: 13.3px; font-weight: 400; height: 26px; }
-        .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-top: 8px; } 
+        /* 전체 행 높이를 조절하여 넉넉한 공간 확보 */
+        .field-row { display: flex; align-items: flex-start; margin-bottom: 2px; font-size: 13.3px; font-weight: 400; height: 32px; }
+        .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-top: 15px; } 
         
-        /* [중요] min-height와 display 설정을 통해 빈 값이어도 선 위치 고정 */
+        /* [핵심] 글자와 밑줄을 모두 8px~10px 가량 하향 조정 */
         .line { 
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            margin-top: 8px; 
-            padding-bottom: 2px; 
+            margin-top: 15px; /* 글자 시작 위치를 대폭 내림 */
+            padding-bottom: 1px; 
             margin-right: 85px; 
             white-space: nowrap; 
             overflow: hidden; 
@@ -41,15 +41,15 @@
             color: #000; 
             font-weight: 700; 
             line-height: 1; 
-            min-height: 14px; /* 값이 없어도 높이 유지 */
+            min-height: 14px; 
             display: inline-block; 
         }
         .line-full { 
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            margin-top: 8px; 
-            padding-bottom: 2px; 
+            margin-top: 15px; 
+            padding-bottom: 1px; 
             margin-right: 0; 
             white-space: nowrap; 
             overflow: hidden; 
@@ -61,7 +61,8 @@
             display: inline-block; 
         }
 
-        #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.6cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
+        /* QR 위치: 내려간 줄 위치에 맞춰 조정 */
+        #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.65cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
         
         .action-btns { display: flex; gap: 10px; justify-content: center; margin-top: 30px; }
         .sub-btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; border: 1.5px solid #000; background: #fff; font-weight: 600; }
@@ -82,7 +83,7 @@
         <input type="text" id="phone" placeholder="Phone (+, -, numbers only)" oninput="this.value = this.value.replace(/[^0-9+\-]/g, '')">
         <input type="text" id="sns-type" placeholder="Social Type">
         <input type="text" id="sns-id" placeholder="Social ID">
-        <input type="email" id="email" placeholder="Email Address">
+        <input type="text" id="email" placeholder="Email Address (e.g. name@mail.com)">
         <button class="btn-black" onclick="generateQR()">Create QR Code</button>
     </div>
 
@@ -94,7 +95,7 @@
                 <div class="field-row"><div class="label-container"><span>Phone</span><span>:</span></div><span id="p-phone" class="line"></span></div>
                 <div class="field-row"><div class="label-container"><span>Social</span><span>:</span></div><span id="p-sns-type" class="line"></span></div>
                 <div class="field-row"><div class="label-container"><span>ID</span><span>:</span></div><span id="p-sns-id" class="line"></span></div>
-                <div class="field-row" style="margin-top:4px;"><div class="label-container"><span>Mail</span><span>:</span></div><span id="p-email" class="line-full"></span></div>
+                <div class="field-row" style="margin-top:2px;"><div class="label-container"><span>Mail</span><span>:</span></div><span id="p-email" class="line-full"></span></div>
             </div>
             <div id="qrcode-wrapper"><div id="qrcode"></div></div>
         </div>
@@ -117,7 +118,14 @@
             if (snsType && !snsId) { alert("SNS ID를 입력해주세요."); return; }
             if (!snsType && snsId) { alert("SNS 종류를 입력해주세요."); return; }
 
-            // 데이터 출력 시 값이 없으면 공백 문자라도 넣어 높이를 유지함
+            if (email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert("올바른 이메일 형식이 아닙니다.");
+                    return;
+                }
+            }
+
             document.getElementById('p-name').innerText = name || " ";
             document.getElementById('p-phone').innerText = phone || " ";
             document.getElementById('p-sns-type').innerText = snsType || " ";
