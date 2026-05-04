@@ -1,60 +1,58 @@
 function generateQR() {
     const name = document.getElementById('name').value.trim();
-    const snsType = document.getElementById('sns-type').value.trim();
+    const snsType = document.getElementById('sns-type').value;
     const snsId = document.getElementById('sns-id').value.trim();
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim();
     const qrcodeContainer = document.getElementById('qrcode');
 
-    // 1. 이름 필수 입력 확인
-    if (!name) {
-        alert("Please enter your Name.");
-        return;
-    }
+    // 1. 이름 검증
+    if (!name) { alert("이름을 입력해 주세요."); return; }
 
-    // 2. 이메일 형식 정밀 검증 (수정된 로직)
+    // 2. 이메일 형식 정밀 검증
     if (email !== "") {
-        // [문자]@ [문자]. [2글자 이상의 도메인] 형식을 검사합니다.
         const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
         if (!emailPattern.test(email)) {
-            alert("Please enter a complete Email Address (e.g., example@domain.com).");
+            alert("올바른 이메일 형식을 입력해 주세요. (예: example@domain.com)");
             return;
         }
     }
 
-    // 3. SNS 종류 입력 시 ID 필수 확인
-    if (snsType && !snsId) {
-        alert("Please enter your SNS ID.");
-        return;
-    }
-
-    // 4. 최소 하나의 연락 수단 확인
-    const hasSnsSet = snsType && snsId;
-    const hasEmail = email !== "";
-    const hasPhone = phone !== "";
-
-    if (!hasSnsSet && !hasEmail && !hasPhone) {
-        alert("Please provide at least one contact: SNS info, Email, or Phone number.");
-        return;
-    }
-
-    // 5. QR 코드 생성 로직 (URL에만 데이터 저장)
+    // 3. QR 생성
     qrcodeContainer.innerHTML = "";
+    // 현재 주소를 기반으로 view.html 경로 생성
     const baseUrl = window.location.origin + window.location.pathname.replace('index.html', '') + "view.html";
+    const params = new URLSearchParams({ n: name, s: snsType, i: snsId, e: email, p: phone });
     
-    const params = new URLSearchParams({
-        n: name,
-        s: snsType,
-        i: snsId,
-        e: email,
-        p: phone
-    });
+    const finalUrl = `${baseUrl}?${params.toString()}`;
 
     new QRCode(qrcodeContainer, {
-        text: `${baseUrl}?${params.toString()}`,
-        width: 180,
-        height: 180,
-        colorDark : "#000000",
-        colorLight : "#ffffff"
+        text: finalUrl,
+        width: 100,
+        height: 100,
+        colorDark: "#000000",
+        colorLight: "#ffffff"
     });
+
+    // 4. 인쇄용 카드 데이터 매칭
+    document.getElementById('p-name').innerText = name;
+    document.getElementById('p-phone').innerText = phone || "";
+    document.getElementById('p-sns').innerText = snsId ? `${snsType}: ${snsId}` : "";
+    document.getElementById('p-email').innerText = email || "";
+
+    // 결과 화면 표시
+    document.getElementById('result-area').style.display = "block";
+
+    // 5. 다운로드 버튼 활성화 (QR 생성 후 이미지가 렌더링될 시간 필요)
+    setTimeout(() => {
+        const img = qrcodeContainer.querySelector('img');
+        if (img) {
+            document.getElementById('download-btn').onclick = function() {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = `MinimalSquare_QR_${name}.png`;
+                link.click();
+            };
+        }
+    }, 500);
 }
