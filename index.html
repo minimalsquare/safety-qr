@@ -23,11 +23,43 @@
         .card-inner { padding: 0 0.5cm; }
         .card-title { margin: 0 0 10px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
         
+        /* 행의 높이를 고정하여 데이터 유무와 상관없이 간격 유지 */
         .field-row { display: flex; align-items: flex-start; margin-bottom: 3px; font-size: 13.3px; font-weight: 400; height: 26px; }
         .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-top: 8px; } 
         
-        .line { border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; margin-top: 8px; padding-bottom: 2px; margin-right: 85px; white-space: nowrap; overflow: hidden; font-size: 13.3px; color: #000; font-weight: 700; line-height: 1; }
-        .line-full { border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; margin-top: 8px; padding-bottom: 2px; margin-right: 0; white-space: nowrap; overflow: hidden; font-size: 13.3px; color: #000; font-weight: 700; line-height: 1; }
+        /* [중요] min-height와 display 설정을 통해 빈 값이어도 선 위치 고정 */
+        .line { 
+            border-bottom: 1px solid #000; 
+            flex-grow: 1; 
+            padding-left: 5px; 
+            margin-top: 8px; 
+            padding-bottom: 2px; 
+            margin-right: 85px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            font-size: 13.3px; 
+            color: #000; 
+            font-weight: 700; 
+            line-height: 1; 
+            min-height: 14px; /* 값이 없어도 높이 유지 */
+            display: inline-block; 
+        }
+        .line-full { 
+            border-bottom: 1px solid #000; 
+            flex-grow: 1; 
+            padding-left: 5px; 
+            margin-top: 8px; 
+            padding-bottom: 2px; 
+            margin-right: 0; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            font-size: 13.3px; 
+            color: #000; 
+            font-weight: 700; 
+            line-height: 1; 
+            min-height: 14px; 
+            display: inline-block; 
+        }
 
         #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.6cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
         
@@ -80,38 +112,26 @@
             const snsId = document.getElementById('sns-id').value.trim();
             const email = document.getElementById('email').value.trim();
 
-            // [규칙 1] 이름 필수 체크
             if (!name) { alert("이름을 입력해주세요."); return; }
-
-            // [규칙 2] 연락처 중 최소 하나 입력 체크
-            if (!phone && !email && !snsType && !snsId) {
-                alert("Phone, Email, SNS 중 최소 하나의 연락처는 입력해야 합니다.");
-                return;
-            }
-
-            // [규칙 3] SNS 입력 완결성 체크
+            if (!phone && !email && !snsType && !snsId) { alert("연락처를 최소 하나는 입력해야 합니다."); return; }
             if (snsType && !snsId) { alert("SNS ID를 입력해주세요."); return; }
             if (!snsType && snsId) { alert("SNS 종류를 입력해주세요."); return; }
 
-            // 화면 출력 로직
-            document.getElementById('p-name').innerText = name;
-            document.getElementById('p-phone').innerText = phone;
-            document.getElementById('p-sns-type').innerText = snsType;
-            document.getElementById('p-sns-id').innerText = snsId;
-            document.getElementById('p-email').innerText = email;
+            // 데이터 출력 시 값이 없으면 공백 문자라도 넣어 높이를 유지함
+            document.getElementById('p-name').innerText = name || " ";
+            document.getElementById('p-phone').innerText = phone || " ";
+            document.getElementById('p-sns-type').innerText = snsType || " ";
+            document.getElementById('p-sns-id').innerText = snsId || " ";
+            document.getElementById('p-email').innerText = email || " ";
 
             const baseUrl = "https://minimalsquare.github.io/safety-qr/view.html"; 
             const queryParams = `?n=${encodeURIComponent(name)}&p=${encodeURIComponent(phone)}&s=${encodeURIComponent(snsType)}&i=${encodeURIComponent(snsId)}&e=${encodeURIComponent(email)}`;
-            const finalUrl = baseUrl + queryParams;
-
+            
             const qrContainer = document.getElementById('qrcode');
             qrContainer.innerHTML = ""; 
             new QRCode(qrContainer, {
-                text: finalUrl, 
-                width: 75, 
-                height: 75,
-                colorDark: "#000000", 
-                colorLight: "#ffffff",
+                text: baseUrl + queryParams, 
+                width: 75, height: 75, colorDark: "#000000", colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
 
