@@ -23,23 +23,23 @@
         .card-inner { padding: 0 0.5cm; }
         .card-title { margin: 0 0 10px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
         
-        /* [수정] 행간을 이전 버전들의 중간 지점인 24px로 설정 */
-        .field-row { display: flex; align-items: flex-end; margin-bottom: 4px; font-size: 13.3px; font-weight: 400; height: 24px; }
-        .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-bottom: 3px; } 
+        /* [수정] 행간을 살짝 더 줄이고 바닥 정렬(flex-end) 적용 */
+        .field-row { display: flex; align-items: flex-end; margin-bottom: 2px; font-size: 13.3px; font-weight: 400; height: 22px; }
+        .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-bottom: 2px; } 
         
-        /* [핵심] 입력값과 라벨의 수평을 맞추기 위해 정렬 최적화 */
+        /* [수정] 입력값과 밑줄을 바닥에 붙이되 시각적 균형을 위해 아주 살짝 상향 조정 */
         .line { 
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            padding-bottom: 1px; /* 라벨과 수평을 맞추기 위한 미세 조정 */
+            padding-bottom: 0px; 
             margin-right: 85px; 
             white-space: nowrap; 
             overflow: hidden; 
             font-size: 13.3px; 
             color: #000; 
             font-weight: 700; 
-            line-height: 1.2; 
+            line-height: 1.1; 
             min-height: 16px; 
             display: inline-block; 
         }
@@ -47,20 +47,19 @@
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            padding-bottom: 1px; 
+            padding-bottom: 0px; 
             margin-right: 0; 
             white-space: nowrap; 
             overflow: hidden; 
             font-size: 13.3px; 
             color: #000; 
             font-weight: 700; 
-            line-height: 1.2; 
+            line-height: 1.1; 
             min-height: 16px; 
             display: inline-block; 
         }
 
-        /* QR 위치: 수평 정렬된 라인들에 맞춰 최적의 위치로 재조정 */
-        #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.65cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
+        #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.6cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
         
         .action-btns { display: flex; gap: 10px; justify-content: center; margin-top: 30px; }
         .sub-btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; border: 1.5px solid #000; background: #fff; font-weight: 600; }
