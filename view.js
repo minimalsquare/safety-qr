@@ -1,13 +1,13 @@
 window.onload = function() {
     const params = new URLSearchParams(window.location.search);
     
-    // HTML의 ID들과 토씨 하나 안 틀리게 매칭했습니다.
+    // HTML의 ID들과 1:1로 정확하게 맞췄습니다.
     const fields = [
         { key: 'n', valId: 'v-n', boxId: 'box-n' },
         { key: 's', valId: 'v-s', boxId: 'box-s' },
         { key: 'i', valId: 'v-i', boxId: 'box-i' },
-        { key: 'e', valId: 'v-e', boxId: 'box-e' }, // v-email 대신 v-e
-        { key: 'p', valId: 'v-p', boxId: 'box-p' }  // v-phone 대신 v-p
+        { key: 'e', valId: 'v-e', boxId: 'box-e' },
+        { key: 'p', valId: 'v-p', boxId: 'box-p' }
     ];
 
     // 1. 정보를 화면에 표시
@@ -22,23 +22,25 @@ window.onload = function() {
         }
     });
 
-    // 2. 전화 걸기 버튼 활성화 (p 파라미터가 있을 때만 출력)
+    // 2. 전화 연결 기능 (핵심)
     const phone = params.get('p');
     const callBtn = document.getElementById('call-link');
-    if (phone && phone.trim() !== "") {
-        callBtn.href = "tel:" + phone.replace(/[^0-9+]/g, "");
+    if (phone && phone.trim() !== "" && callBtn) {
+        // 숫자와 '+'만 남겨서 전화 앱이 인식하기 가장 좋은 형태로 만듭니다.
+        const cleanPhone = phone.replace(/[^0-9+]/g, "");
+        callBtn.href = "tel:" + cleanPhone;
         callBtn.style.display = "block";
-    } else {
+    } else if (callBtn) {
         callBtn.style.display = "none";
     }
 
-    // 3. 메일 보내기 버튼 활성화 (e 파라미터가 있을 때만 출력)
+    // 3. 메일 연결 기능
     const email = params.get('e');
     const mailBtn = document.getElementById('mail-link');
-    if (email && email.trim() !== "") {
+    if (email && email.trim() !== "" && mailBtn) {
         mailBtn.href = "mailto:" + email;
         mailBtn.style.display = "block";
-    } else {
+    } else if (mailBtn) {
         mailBtn.style.display = "none";
     }
 };
