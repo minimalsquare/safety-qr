@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Square | Safety QR Maker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background-color: #fcfcfc; color: #111; }
+        .container { background: white; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); text-align: center; width: 90%; max-width: 380px; border: 1px solid #f0f0f0; }
+        h1 { font-size: 1.5rem; margin-bottom: 8px; font-weight: 500; letter-spacing: -0.5px; }
+        p.tagline { font-size: 0.9rem; color: #777; margin-bottom: 30px; line-height: 1.4; }
+        .input-group { margin-bottom: 12px; text-align: left; }
+        input { width: 100%; padding: 14px; border: 1px solid #e5e5e5; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; outline: none; }
+        input:focus { border-color: #000; }
+        .guide-text { font-size: 0.72rem; color: #aaa; margin: 0 0 10px 5px; line-height: 1.4; }
+        button { width: 100%; padding: 15px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 10px; font-weight: 500; }
+        #qrcode { margin-top: 35px; display: flex; justify-content: center; min-height: 180px; }
+        .footer { margin-top: 35px; font-style: italic; color: #999; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Safety QR Maker</h1>
+        <p class="tagline">We do not save your data.<br>Just make your QR and stay safe.</p>
+        
+        <div class="input-group">
+            <input type="text" id="name" placeholder="Name (Required)">
+        </div>
+        <div class="input-group">
+            <input type="text" id="sns-type" placeholder="SNS or Messenger (e.g. WhatsApp)">
+        </div>
+        <div class="input-group">
+            <input type="text" id="sns-id" placeholder="SNS (or Messenger) ID">
+        </div>
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Email Address">
+        </div>
+        <div class="input-group">
+            <input type="text" id="phone" placeholder="Phone Number">
+        </div>
+        
+        <p class="guide-text">* Write at least one: SNS (or Messenger)+ID, Mail or Phone Number.</p>
+        
+        <button onclick="generateQR()">Make QR Code</button>
+        <div id="qrcode"></div>
+        <div class="footer">May your kindness return to you.</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
