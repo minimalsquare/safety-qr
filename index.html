@@ -36,11 +36,11 @@
         
         .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-bottom: 2px; }
 
-        /* [보정] 글씨가 내려가 보인다면 padding-bottom으로 미세하게 들어올림 */
+        /* 사용자님이 만족하셨던 원래 높이 설정 (padding-bottom 0px) */
         .line { 
             border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; 
             padding-top: 0px; 
-            padding-bottom: 1.5px; /* 선 위로 아주 살짝 올림 */
+            padding-bottom: 0px; 
             min-height: 16px; margin-right: 85px; white-space: nowrap; overflow: hidden; 
             font-size: 13.3px; color: #000; font-weight: 400; line-height: 1.1;
             vertical-align: bottom;
@@ -48,7 +48,7 @@
         .line-full { 
             border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; 
             padding-top: 0px; 
-            padding-bottom: 1.5px; /* 선 위로 아주 살짝 올림 */
+            padding-bottom: 0px; 
             min-height: 16px; margin-right: 0; white-space: nowrap; overflow: hidden; 
             font-size: 13.3px; color: #000; font-weight: 400; line-height: 1.1;
             vertical-align: bottom;
@@ -63,8 +63,8 @@
             #print-card, #print-card * { visibility: visible; }
             #print-card { 
                 position: absolute; 
-                left: 20mm; /* 안전 여백 */
-                top: 20mm;  /* 안전 여백 */
+                left: 20mm; 
+                top: 20mm;  
                 margin: 0;
                 border: 1px solid #000 !important; 
                 box-shadow: none;
