@@ -21,34 +21,32 @@
             position: relative; overflow: hidden; text-align: left;
         }
         .card-inner { padding: 0 0.5cm; }
-        .card-title { margin: 0 0 5px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
+        .card-title { margin: 0 0 10px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
         
-        /* [수정] 줄간격 최소화 (height 축소 및 margin 제거) */
-        .field-row { display: flex; align-items: flex-start; margin-bottom: 0px; font-size: 13.3px; font-weight: 400; height: 22px; }
-        .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-top: 2px; } 
+        /* [수정] 행간을 이전 버전들의 중간 지점인 24px로 설정 */
+        .field-row { display: flex; align-items: flex-end; margin-bottom: 4px; font-size: 13.3px; font-weight: 400; height: 24px; }
+        .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-bottom: 3px; } 
         
-        /* [핵심] 입력값과 밑줄을 라벨보다 한참 아래로 내림 (margin-top 대폭 증가) */
+        /* [핵심] 입력값과 라벨의 수평을 맞추기 위해 정렬 최적화 */
         .line { 
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            margin-top: 12px; /* 라벨보다 확연히 아래로 내려오게 조정 */
-            padding-bottom: 1px; 
+            padding-bottom: 1px; /* 라벨과 수평을 맞추기 위한 미세 조정 */
             margin-right: 85px; 
             white-space: nowrap; 
             overflow: hidden; 
             font-size: 13.3px; 
             color: #000; 
             font-weight: 700; 
-            line-height: 1; 
-            min-height: 14px; 
+            line-height: 1.2; 
+            min-height: 16px; 
             display: inline-block; 
         }
         .line-full { 
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            margin-top: 12px; 
             padding-bottom: 1px; 
             margin-right: 0; 
             white-space: nowrap; 
@@ -56,13 +54,13 @@
             font-size: 13.3px; 
             color: #000; 
             font-weight: 700; 
-            line-height: 1; 
-            min-height: 14px; 
+            line-height: 1.2; 
+            min-height: 16px; 
             display: inline-block; 
         }
 
-        /* QR 위치: 내려간 Name 밑줄에 맞춰 하향 고정 */
-        #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.8cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
+        /* QR 위치: 수평 정렬된 라인들에 맞춰 최적의 위치로 재조정 */
+        #qrcode-wrapper { position: absolute; right: 0.4cm; top: 1.65cm; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; }
         
         .action-btns { display: flex; gap: 10px; justify-content: center; margin-top: 30px; }
         .sub-btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; border: 1.5px solid #000; background: #fff; font-weight: 600; }
@@ -95,7 +93,7 @@
                 <div class="field-row"><div class="label-container"><span>Phone</span><span>:</span></div><span id="p-phone" class="line"></span></div>
                 <div class="field-row"><div class="label-container"><span>Social</span><span>:</span></div><span id="p-sns-type" class="line"></span></div>
                 <div class="field-row"><div class="label-container"><span>ID</span><span>:</span></div><span id="p-sns-id" class="line"></span></div>
-                <div class="field-row" style="margin-top:2px;"><div class="label-container"><span>Mail</span><span>:</span></div><span id="p-email" class="line-full"></span></div>
+                <div class="field-row" style="margin-top:4px;"><div class="label-container"><span>Mail</span><span>:</span></div><span id="p-email" class="line-full"></span></div>
             </div>
             <div id="qrcode-wrapper"><div id="qrcode"></div></div>
         </div>
