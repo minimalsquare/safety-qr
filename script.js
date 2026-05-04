@@ -6,19 +6,29 @@ function generateQR() {
     const phone = document.getElementById('phone').value.trim();
     const qrcodeContainer = document.getElementById('qrcode');
 
-    // 1. 이름은 필수
+    // 1. 이름 필수 입력 확인
     if (!name) {
         alert("Please enter your Name.");
         return;
     }
 
-    // 2. SNS 종류 입력 시 ID 필수
+    // 2. 이메일 형식 검증 (추가된 로직)
+    if (email !== "") {
+        // @와 .을 포함하는 표준 이메일 형식인지 확인하는 정규식
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid Email Address (e.g., example@domain.com).");
+            return;
+        }
+    }
+
+    // 3. SNS 종류 입력 시 ID 필수 확인
     if (snsType && !snsId) {
         alert("Please enter your SNS ID.");
         return;
     }
 
-    // 3. 연락처 수단 중 최소 하나 입력 확인 (SNS세트, 메일, 전화번호)
+    // 4. 최소 하나의 연락 수단 확인
     const hasSnsSet = snsType && snsId;
     const hasEmail = email !== "";
     const hasPhone = phone !== "";
@@ -28,7 +38,7 @@ function generateQR() {
         return;
     }
 
-    // 4. QR 코드 생성 (모든 정보는 URL에만 저장)[cite: 1]
+    // 5. QR 코드 생성
     qrcodeContainer.innerHTML = "";
     const baseUrl = window.location.origin + window.location.pathname.replace('index.html', '') + "view.html";
     
