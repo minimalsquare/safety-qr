@@ -23,17 +23,15 @@
         .card-inner { padding: 0 0.5cm; }
         .card-title { margin: 0 0 16px 0; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
         
-        /* 라벨과 입력값의 시각적 수평을 위해 정렬 방식 변경 */
         .field-row { display: flex; align-items: flex-start; margin-bottom: 7px; font-size: 13.3px; font-weight: 400; height: 25px; }
         .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-top: 2px; }
         
-        /* [핵심 수정] 글자를 5px 내리고, 밑줄을 더 여유 있게 하향 조정 */
         .line { 
             border-bottom: 1px solid #000; 
             flex-grow: 1; 
             padding-left: 5px; 
-            margin-top: 5px; /* 글자 전체를 아래로 이동 */
-            padding-bottom: 2px; /* 글자와 밑줄 사이 간격 */
+            margin-top: 5px; 
+            padding-bottom: 2px; 
             margin-right: 85px; 
             white-space: nowrap; 
             overflow: hidden; 
@@ -99,6 +97,52 @@
             <button id="download-btn" class="sub-btn">Save QR Image</button>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        function generateQR() {
+            // 1. 데이터 가져오기
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const snsType = document.getElementById('sns-type').value;
+            const snsId = document.getElementById('sns-id').value;
+            const email = document.getElementById('email').value;
+
+            // 2. 미리보기 카드에 데이터 출력 (여기서 메일 출력이 추가되었습니다!)
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-phone').innerText = phone;
+            document.getElementById('p-sns-type').innerText = snsType;
+            document.getElementById('p-sns-id').innerText = snsId;
+            document.getElementById('p-email').innerText = email; // [오류 해결 포인트]
+
+            // 3. QR URL 생성
+            const baseUrl = "https://minimalsquare.github.io/safety-qr/view.html"; 
+            const queryParams = `?n=${encodeURIComponent(name)}&p=${encodeURIComponent(phone)}&s=${encodeURIComponent(snsType)}&i=${encodeURIComponent(snsId)}&e=${encodeURIComponent(email)}`;
+            const finalUrl = baseUrl + queryParams;
+
+            // 4. QR 코드 생성
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = ""; 
+            new QRCode(qrContainer, {
+                text: finalUrl, 
+                width: 75, 
+                height: 75,
+                colorDark: "#000000", 
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+
+            document.getElementById('result-area').style.display = 'block';
+        }
+
+        document.getElementById('download-btn').addEventListener('click', function() {
+            const qrCanvas = document.querySelector('#qrcode canvas');
+            if (qrCanvas) {
+                const link = document.createElement('a');
+                link.download = 'minimal_square_qr.png';
+                link.href = qrCanvas.toDataURL();
+                link.click();
+            }
+        });
+    </script>
 </body>
 </html>
