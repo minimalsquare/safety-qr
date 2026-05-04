@@ -6,19 +6,10 @@
     <title>Minimal Square | QR Maker</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        /* 구글 본고딕(Noto Sans KR) 상업용 무료 폰트 호출 */
+        /* 저작권 걱정 없는 상업용 무료 본고딕 호출 */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
-        body { 
-            font-family: 'Noto Sans KR', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 40px 20px; 
-            background-color: #fff; 
-            color: #333; 
-            margin: 0; 
-        }
+        body { font-family: 'Noto Sans KR', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; background-color: #fff; color: #333; margin: 0; }
         h1 { font-weight: 700; letter-spacing: -1px; margin-bottom: 25px; }
         .input-group { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
         input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
@@ -26,47 +17,48 @@
         
         #result-area { display: none; margin-top: 40px; text-align: center; width: 100%; }
         
+        /* 카드 규격 (8.5cm * 5.4cm) */
         #print-card { 
             width: 8.5cm; height: 5.4cm; border: 1px solid #000; border-radius: 12px; 
             padding: 0; box-sizing: border-box; background: #fff; margin: 0 auto; 
             display: flex; flex-direction: column; justify-content: center;
             position: relative; overflow: hidden; text-align: left;
-            font-family: 'Noto Sans KR', sans-serif;
         }
 
         .card-inner { padding: 0 0.5cm; }
         
-        /* 타이틀: 12pt 수준 및 가장 두꺼운 900 볼드 적용 */
+        /* 타이틀: 12pt(16px), 900 볼드, 자간 1px 강조 */
         .card-title { 
             margin: 0 0 16px 0; 
             font-size: 16px; 
             font-weight: 900; 
-            letter-spacing: -0.5px;
+            letter-spacing: 1px;
+            font-family: 'Noto Sans KR', sans-serif;
         }
         
-        /* 본문 라벨: 10pt (약 13.3px) 및 700 볼드 적용 */
+        /* 본문 라벨: 10pt(13.3px), 볼드 해제(400) */
         .field-row { 
             display: flex; 
             align-items: flex-end; 
             margin-bottom: 7px; 
             font-size: 13.3px; 
-            font-weight: 700; 
+            font-weight: 400; 
             height: 19px; 
         }
         
         .label-container { display: flex; width: 55px; justify-content: space-between; flex-shrink: 0; margin-right: 5px; padding-bottom: 2px; }
 
-        /* 입력 데이터: 9pt (약 12px) 및 일반 두께(400)로 대비 */
+        /* 입력 데이터: 9pt(12px), 중요 정보 볼드(700) 강조 */
         .line { 
             border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; padding-bottom: 0px; 
             min-height: 16px; margin-right: 85px; white-space: nowrap; overflow: hidden; 
-            font-size: 12px; color: #000; font-weight: 400;
+            font-size: 12px; color: #000; font-weight: 700;
             line-height: 1.2; vertical-align: bottom;
         }
         .line-full { 
             border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; padding-bottom: 0px;
             min-height: 16px; margin-right: 0; white-space: nowrap; overflow: hidden; 
-            font-size: 12px; color: #000; font-weight: 400;
+            font-size: 12px; color: #000; font-weight: 700;
             line-height: 1.2; vertical-align: bottom;
         }
 
@@ -92,8 +84,8 @@
     <div class="input-group">
         <input type="text" id="name" placeholder="Name">
         <input type="tel" id="phone" placeholder="Phone">
-        <input type="text" id="sns-type" placeholder="SNS / Messenger (e.g. Kakao, Insta)">
-        <input type="text" id="sns-id" placeholder="SNS / Messenger ID">
+        <input type="text" id="sns-type" placeholder="Social (e.g. Kakao, Insta)">
+        <input type="text" id="sns-id" placeholder="ID">
         <input type="email" id="email" placeholder="Mail Address">
         <button class="btn-black" onclick="generateQR()">Create QR Code</button>
     </div>
