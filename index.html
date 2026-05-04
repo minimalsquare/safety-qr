@@ -3,51 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Square | QR Card Maker</title>
+    <title>Minimal Square | QR Maker</title>
+    <!-- QR 라이브러리 (정상 작동 확인됨) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body { font-family: 'Apple SD Gothic Neo', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; background-color: #fff; color: #333; margin: 0; }
         h1 { font-weight: 700; letter-spacing: -1px; margin-bottom: 25px; }
-        
         .input-group { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
-        input, select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
-        
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
         .btn-black { background: #000; color: #fff; padding: 16px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.2s; margin-top: 10px; }
-        .btn-black:hover { opacity: 0.8; }
-
-        /* QR 생성 전에는 숨겨져 있는 영역 */
+        
+        /* 결과 영역 (생성 버튼 누르면 나타남) */
         #result-area { display: none; margin-top: 40px; text-align: center; width: 100%; }
         
-        /* 카드 디자인 (8.5cm x 5.4cm) */
+        /* 8.5 * 5.4 카드 디자인 */
         #print-card { 
-            width: 8.5cm; height: 5.4cm; 
-            border: 1px solid #000; border-radius: 15px; 
-            padding: 0.6cm 0.5cm; box-sizing: border-box;
-            background: #fff; margin: 0 auto; 
-            position: relative; overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: left;
+            width: 8.5cm; height: 5.4cm; border: 1px solid #000; border-radius: 15px; 
+            padding: 0.6cm 0.5cm; box-sizing: border-box; background: #fff; margin: 0 auto; 
+            position: relative; overflow: hidden; font-family: 'Courier New', Courier, monospace; text-align: left;
         }
-
-        .card-title { margin: 0 0 25px 0; font-size: 18px; font-weight: bold; letter-spacing: 0.5px; }
+        .card-title { margin: 0 0 25px 0; font-size: 18px; font-weight: bold; }
         .field-row { display: flex; align-items: flex-end; margin-bottom: 12px; font-size: 11px; font-weight: bold; }
-        .label { min-width: 130px; display: inline-block; }
+        .label { min-width: 150px; display: inline-block; white-space: pre; }
         .line { border-bottom: 1px solid #000; flex-grow: 1; padding-left: 5px; min-height: 14px; }
 
+        /* QR 코드 위치 */
         #qrcode-wrapper {
             position: absolute; right: 0.5cm; top: 1.5cm;
-            width: 85px; height: 85px; 
+            width: 85px; height: 85px; background: #f0f0f0;
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* 인쇄 및 저장 버튼 그룹 */
         .action-btns { display: flex; gap: 10px; justify-content: center; margin-top: 30px; }
         .sub-btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; border: 1.5px solid #000; background: #fff; font-weight: 600; }
 
         @media print {
             body * { visibility: hidden; }
             #print-card, #print-card * { visibility: visible; }
-            #print-card { position: absolute; left: 0; top: 0; border: 1px solid #000 !important; box-shadow: none; }
+            #print-card { position: absolute; left: 0; top: 0; border: 1px solid #000 !important; }
             @page { size: 8.5cm 5.4cm; margin: 0; }
         }
     </style>
@@ -58,24 +51,19 @@
         <input type="text" id="name" placeholder="Name">
         <input type="tel" id="phone" placeholder="Phone">
         <input type="email" id="email" placeholder="Mail">
-        <select id="sns-type">
-            <option value="">SNS / Messenger</option>
-            <option value="Instagram">Instagram</option>
-            <option value="KakaoTalk">KakaoTalk</option>
-            <option value="Line">Line</option>
-        </select>
+        <!-- 이제 고객이 직접 입력합니다 -->
+        <input type="text" id="sns-type" placeholder="SNS / Messenger (e.g. Kakao, Insta)">
         <input type="text" id="sns-id" placeholder="SNS / Messenger ID">
         <button class="btn-black" onclick="generateQR()">Make QR Code</button>
     </div>
 
-    <!-- 버튼을 누르면 이 영역 전체가 나타납니다 -->
     <div id="result-area">
         <div id="print-card">
             <div class="card-title">Personal Identification</div>
-            <div class="field-row"><span class="label">Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span><span id="p-name" class="line"></span></div>
-            <div class="field-row"><span class="label">Phone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span><span id="p-phone" class="line"></span></div>
-            <div class="field-row"><span class="label">Mail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span><span id="p-email" class="line"></span></div>
-            <div class="field-row" style="margin-top:15px;"><span class="label">SNS / Messenger&nbsp;&nbsp;&nbsp;:</span><span id="p-sns-type" class="line"></span></div>
+            <div class="field-row"><span class="label">Name             :</span><span id="p-name" class="line"></span></div>
+            <div class="field-row"><span class="label">Phone            :</span><span id="p-phone" class="line"></span></div>
+            <div class="field-row"><span class="label">Mail             :</span><span id="p-email" class="line"></span></div>
+            <div class="field-row" style="margin-top:15px;"><span class="label">SNS / Messenger      :</span><span id="p-sns-type" class="line"></span></div>
             <div class="field-row"><span class="label">SNS / Messenger ID :</span><span id="p-sns-id" class="line"></span></div>
             <div id="qrcode-wrapper"><div id="qrcode"></div></div>
         </div>
